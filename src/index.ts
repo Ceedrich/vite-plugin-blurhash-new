@@ -38,7 +38,7 @@ export const defineHashes = (
     for (const image of imagesToBlur) {
         if (blurhashMap[image.fileName] != null) continue;
 
-        blurhashThis(`${cwd}${options.imageDir}/${image.fileName}`)
+        blurhashThis(image.fileNameFull)
             .then((hash) => {
                 blurhashMap[image.fileName] = hash;
                 if (mapPath) writeFileSync(mapPath, JSON.stringify(blurhashMap, null, 4));
