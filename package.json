@@ -2,7 +2,8 @@
     "type": "module",
     "name": "vite-plugin-blurhash-new",
     "version": "1.0.0",
-    "main": "test.js",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
         "dev": "tsc --watch",
         "build": "tsc --build",
