@@ -4,7 +4,10 @@
     "version": "1.0.0",
     "main": "test.js",
     "scripts": {
-        "build": "tsc --build"
+        "dev": "tsc --watch",
+        "build": "tsc --build",
+        "prepublishOnly": "npm run build",
+        "release": "git-ensure --no-behind -b main --clean && bumpp --commit --tag --push"
     },
     "keywords": [],
     "author": "",
