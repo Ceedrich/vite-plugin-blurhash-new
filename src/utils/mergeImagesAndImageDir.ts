@@ -15,8 +15,7 @@ export const mergeImagesAndImageDir = ({ images, imageDir }: args) => {
         const files = getFilesRecursively(imageDir);
         for (const file of files) {
             if (isImage(file)) {
-                const fileName = file.split(imageDir).at(-1) as string;
-                img.push({ fileName });
+                img.push({ fileName: file });
             }
         }
     }
