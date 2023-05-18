@@ -48,7 +48,8 @@ var mergeImagesAndImageDir = ({ images, imageDir }) => {
     const files = getFilesRecursively(imageDir);
     for (const file of files) {
       if (isImage(file)) {
-        img.push({ fileName: file });
+        const fileName = file.split(imageDir).at(-1);
+        img.push({ fileName, fileNameFull: file });
       }
     }
   }
@@ -128,7 +129,7 @@ var defineHashes = (options) => {
   for (const image of imagesToBlur) {
     if (blurhashMap[image.fileName] != null)
       continue;
-    blurhashThis(`${cwd}${options.imageDir}/${image.fileName}`).then((hash) => {
+    blurhashThis(image.fileNameFull).then((hash) => {
       blurhashMap[image.fileName] = hash;
       if (mapPath)
         writeFileSync(mapPath, JSON.stringify(blurhashMap, null, 4));

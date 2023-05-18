@@ -80,7 +80,8 @@ var mergeImagesAndImageDir = ({ images, imageDir }) => {
     const files = getFilesRecursively(imageDir);
     for (const file of files) {
       if ((0, import_is_image.default)(file)) {
-        img.push({ fileName: file });
+        const fileName = file.split(imageDir).at(-1);
+        img.push({ fileName, fileNameFull: file });
       }
     }
   }
@@ -160,7 +161,7 @@ var defineHashes = (options) => {
   for (const image of imagesToBlur) {
     if (blurhashMap[image.fileName] != null)
       continue;
-    blurhashThis(`${cwd}${options.imageDir}/${image.fileName}`).then((hash) => {
+    blurhashThis(image.fileNameFull).then((hash) => {
       blurhashMap[image.fileName] = hash;
       if (mapPath)
         (0, import_fs3.writeFileSync)(mapPath, JSON.stringify(blurhashMap, null, 4));
