@@ -1,5 +1,10 @@
+"use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
@@ -14,18 +19,45 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
-import chalk from "chalk";
-import { existsSync as existsSync2, readFileSync, rmSync, writeFileSync } from "fs";
+var src_exports = {};
+__export(src_exports, {
+  blurhash: () => blurhash,
+  defineHashes: () => defineHashes
+});
+module.exports = __toCommonJS(src_exports);
+var import_chalk = __toESM(require("chalk"), 1);
+var import_fs3 = require("fs");
 
 // src/utils/getFilesRecursively.ts
-import { readdirSync, statSync } from "fs";
-import { join } from "path";
-var isDirectory = (path) => statSync(path).isDirectory();
-var isFile = (path) => statSync(path).isFile();
-var getDirectories = (path) => readdirSync(path).map((name) => join(path, name)).filter(isDirectory).map((name) => name.replace(/\\/g, "/"));
-var getFiles = (path) => readdirSync(path).map((name) => join(path, name)).filter(isFile).map((name) => name.replace(/\\/g, "/"));
+var import_fs = require("fs");
+var import_path = require("path");
+var isDirectory = (path) => (0, import_fs.statSync)(path).isDirectory();
+var isFile = (path) => (0, import_fs.statSync)(path).isFile();
+var getDirectories = (path) => (0, import_fs.readdirSync)(path).map((name) => (0, import_path.join)(path, name)).filter(isDirectory).map((name) => name.replace(/\\/g, "/"));
+var getFiles = (path) => (0, import_fs.readdirSync)(path).map((name) => (0, import_path.join)(path, name)).filter(isFile).map((name) => name.replace(/\\/g, "/"));
 var getFilesRecursively = (path) => {
   const dirs = getDirectories(path);
   const files = dirs.map((dir) => getFilesRecursively(dir)).reduce((a, b) => a.concat(b), []);
@@ -33,8 +65,8 @@ var getFilesRecursively = (path) => {
 };
 
 // src/utils/mergeImagesAndImageDir.ts
-import isImage from "is-image";
-import { existsSync } from "fs";
+var import_is_image = __toESM(require("is-image"), 1);
+var import_fs2 = require("fs");
 
 // src/utils/isValidURL.ts
 var isValidURL = (src) => {
@@ -47,7 +79,7 @@ var mergeImagesAndImageDir = ({ images, imageDir }) => {
   if (imageDir) {
     const files = getFilesRecursively(imageDir);
     for (const file of files) {
-      if (isImage(file)) {
+      if ((0, import_is_image.default)(file)) {
         const fileName = file.split(imageDir).at(-1);
         img.push({ fileName: file });
       }
@@ -57,7 +89,7 @@ var mergeImagesAndImageDir = ({ images, imageDir }) => {
   return [
     ...img,
     ...Object.keys(images).reduce((filtered, key) => {
-      if (isValidURL(images[key]) || existsSync(cwd + images[key]) && isImage(images[key])) {
+      if (isValidURL(images[key]) || (0, import_fs2.existsSync)(cwd + images[key]) && (0, import_is_image.default)(images[key])) {
         filtered.push({
           [key]: isValidURL(images[key]) ? images[key] : cwd + images[key]
         });
@@ -68,15 +100,15 @@ var mergeImagesAndImageDir = ({ images, imageDir }) => {
 };
 
 // src/utils/blur.ts
-import sharp from "sharp";
-import { encode } from "blurhash";
-import axios from "axios";
+var import_sharp = __toESM(require("sharp"), 1);
+var import_blurhash = require("blurhash");
+var import_axios = __toESM(require("axios"), 1);
 var blur = async (src, callback) => {
-  sharp(src).raw().ensureAlpha().resize(32, 32, { fit: "inside" }).toBuffer((err, buffer, info) => {
+  (0, import_sharp.default)(src).raw().ensureAlpha().resize(32, 32, { fit: "inside" }).toBuffer((err, buffer, info) => {
     if (err)
       callback(err);
     try {
-      const hash = encode(
+      const hash = (0, import_blurhash.encode)(
         new Uint8ClampedArray(buffer),
         info == null ? void 0 : info.width,
         info == null ? void 0 : info.height,
@@ -91,7 +123,7 @@ var blur = async (src, callback) => {
 };
 var blurhashThis = async (src) => new Promise((resolve, reject) => {
   if (isValidURL(src)) {
-    axios.get(src).then((res) => {
+    import_axios.default.get(src).then((res) => {
       blur(res.data, (err, hash) => {
         if (err)
           reject(err);
@@ -109,35 +141,35 @@ var blurhashThis = async (src) => new Promise((resolve, reject) => {
 // src/index.ts
 var defineHashes = (options) => {
   const cwd = process.cwd().replace(/\\/g, "/");
-  const imageDir = options.imageDir && existsSync2(cwd + options.imageDir) ? cwd + options.imageDir : false;
+  const imageDir = options.imageDir && (0, import_fs3.existsSync)(cwd + options.imageDir) ? cwd + options.imageDir : false;
   const imagesToBlur = mergeImagesAndImageDir({
     images: (options == null ? void 0 : options.images) || {},
     imageDir
   });
   const mapPath = options.mapPath ? cwd + options.mapPath : false;
-  let blurhashMapExists = mapPath ? existsSync2(mapPath) : false;
+  let blurhashMapExists = mapPath ? (0, import_fs3.existsSync)(mapPath) : false;
   if (mapPath && options.overrideMap && blurhashMapExists) {
-    console.log(chalk.green(`Deleting ${mapPath}`));
-    rmSync(mapPath);
+    console.log(import_chalk.default.green(`Deleting ${mapPath}`));
+    (0, import_fs3.rmSync)(mapPath);
     blurhashMapExists = false;
   }
   if (!blurhashMapExists && mapPath) {
-    console.log(chalk.green(`Writing ${mapPath}`));
-    writeFileSync(mapPath, "{}");
+    console.log(import_chalk.default.green(`Writing ${mapPath}`));
+    (0, import_fs3.writeFileSync)(mapPath, "{}");
   }
-  const blurhashMap = mapPath ? JSON.parse(readFileSync(mapPath, "utf-8")) : {};
+  const blurhashMap = mapPath ? JSON.parse((0, import_fs3.readFileSync)(mapPath, "utf-8")) : {};
   for (const image of imagesToBlur) {
     if (blurhashMap[image.fileName] != null)
       continue;
     blurhashThis(image.fileName).then((hash) => {
       blurhashMap[image.fileName] = JSON.stringify(hash);
       if (mapPath)
-        writeFileSync(mapPath, JSON.stringify(blurhashMap, null, 4));
+        (0, import_fs3.writeFileSync)(mapPath, JSON.stringify(blurhashMap, null, 4));
       if (options.log)
-        console.log(chalk.green(`\u2714 Finished hashing ${image.fileName}`));
+        console.log(import_chalk.default.green(`\u2714 Finished hashing ${image.fileName}`));
     }).catch((err) => {
       if (options.log) {
-        console.log(chalk.red(`\u2718 Failed hashing ${image.fileName}`));
+        console.log(import_chalk.default.red(`\u2718 Failed hashing ${image.fileName}`));
         console.log(err);
       }
     });
@@ -169,7 +201,8 @@ function blurhash(options) {
     }
   };
 }
-export {
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
   blurhash,
   defineHashes
-};
+});

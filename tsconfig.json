@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "AMD",
+    "module": "ESNext",
     "target": "es2017",
     "lib": ["ESNext", "DOM"],
     "esModuleInterop": true,
@@ -9,9 +9,6 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "types": ["node"],
-    "outFile": "dist/index.js",
-    "declaration": true
   },
   "exclude": [
     "**/dist",

@@ -5,8 +5,8 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "dev": "tsc --watch",
-        "build": "tsc --build",
+        "dev": "npm run build --watch",
+        "build": "tsup src/index.ts --dts --format cjs,esm",
         "prepublishOnly": "npm run build",
         "release": "git-ensure --no-behind -b main --clean && bumpp --commit --tag --push"
     },
@@ -29,6 +29,7 @@
     },
     "devDependencies": {
         "@types/node": "^20.2.0",
+        "typescript": "^5.0.4",
         "vite": "^4.3.7"
     }
 }
