@@ -128,7 +128,7 @@ var defineHashes = (options) => {
   for (const image of imagesToBlur) {
     if (blurhashMap[image.fileName] != null)
       continue;
-    blurhashThis(`${cwd}/${options.imageDir}/${image.fileName}`).then((hash) => {
+    blurhashThis(`${cwd}${options.imageDir}/${image.fileName}`).then((hash) => {
       blurhashMap[image.fileName] = hash;
       if (mapPath)
         writeFileSync(mapPath, JSON.stringify(blurhashMap, null, 4));
