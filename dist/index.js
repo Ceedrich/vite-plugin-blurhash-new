@@ -49,7 +49,7 @@ var mergeImagesAndImageDir = ({ images, imageDir }) => {
     for (const file of files) {
       if (isImage(file)) {
         const fileName = file.split(imageDir).at(-1);
-        img.push({ fileName: file });
+        img.push({ fileName });
       }
     }
   }
@@ -130,7 +130,7 @@ var defineHashes = (options) => {
     if (blurhashMap[image.fileName] != null)
       continue;
     blurhashThis(image.fileName).then((hash) => {
-      blurhashMap[image.fileName] = JSON.stringify(hash);
+      blurhashMap[image.fileName] = hash;
       if (mapPath)
         writeFileSync(mapPath, JSON.stringify(blurhashMap, null, 4));
       if (options.log)

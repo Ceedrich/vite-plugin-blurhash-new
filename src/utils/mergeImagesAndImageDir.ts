@@ -16,7 +16,7 @@ export const mergeImagesAndImageDir = ({ images, imageDir }: args) => {
         for (const file of files) {
             if (isImage(file)) {
                 const fileName = file.split(imageDir).at(-1) as string;
-                img.push({ fileName: file });
+                img.push({ fileName });
             }
         }
     }

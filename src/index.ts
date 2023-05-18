@@ -40,7 +40,7 @@ export const defineHashes = (
 
         blurhashThis(image.fileName)
             .then((hash) => {
-                blurhashMap[image.fileName] = JSON.stringify(hash);
+                blurhashMap[image.fileName] = hash;
                 if (mapPath) writeFileSync(mapPath, JSON.stringify(blurhashMap, null, 4));
                 if (options.log)
                     console.log(chalk.green(`✔ Finished hashing ${image.fileName}`));
